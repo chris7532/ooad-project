@@ -1,21 +1,44 @@
 package ooad;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
 
-public class Myframe extends JFrame{
+@SuppressWarnings("serial")
+public class Myframe extends JFrame implements ActionListener{
 
 	Box b1 = Box.createVerticalBox();
+	public ArrayList<buttonMode> buttonList;
+	buttonMode sltButton;
+	buttonMode assButton;
+	buttonMode genButton;
+	buttonMode comButton;
+	buttonMode classes;
+	buttonMode useCase;
+	buttonMode currentBtn;
+	
+	
 	Myframe(){
+		//frame setting
 		this.setTitle("Uml Editor");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(600,600);
+		this.setSize(800,700);
+		this.setResizable(false);
+		this.setLayout(new BorderLayout());
 		this.getContentPane().setBackground(Color.DARK_GRAY);
 		
-		JPanel panel = new JPanel();
+		//canvas
+		Canvas canvas = new Canvas(this);
+		
+		//menuBar
 		JMenuBar menuBar = new JMenuBar();
 		
 		JMenu fileMenu = new JMenu("File");
@@ -25,21 +48,23 @@ public class Myframe extends JFrame{
 		JMenuItem exitItem = new JMenuItem("Exit");
 		JMenuItem groupItem = new JMenuItem("Group");
 		
+		//button
+		sltButton = new buttonMode(this,new ImageIcon("select.png"),b1);
+		assButton = new buttonMode(this,new ImageIcon("associate.png"),b1);
+		genButton = new buttonMode(this, new ImageIcon("general.png"),b1);
+		comButton = new buttonMode(this, new ImageIcon("composite.png"),b1);
+		classes = new buttonMode(this, new ImageIcon("class.png"),b1);
+		useCase = new buttonMode(this, new ImageIcon("usecase.png"),b1);
 		
-		JButton sltButton = new JButton("select");
-		JButton assButton = new JButton("association");
-		JButton genButton = new JButton("generalization");
-		JButton comButton = new JButton("composition");
-		JButton classes = new JButton("class");
-		JButton useCase = new JButton("use case");
+		buttonList = new ArrayList<buttonMode>();
+		buttonList.add(sltButton);
+		buttonList.add(assButton);
+		buttonList.add(genButton);
+		buttonList.add(comButton);
+		buttonList.add(classes);
+		buttonList.add(useCase);
 		
-		
-		setButton(sltButton);
-		setButton(assButton);
-		setButton(genButton);
-		setButton(comButton);
-		setButton(classes);
-		setButton(useCase);
+
 		
 		menuBar.add(fileMenu);
 		menuBar.add(editMenu);
@@ -47,17 +72,45 @@ public class Myframe extends JFrame{
 		fileMenu.add(exitItem);
 		editMenu.add(groupItem);
 		this.setJMenuBar(menuBar);
+			
 		
-		
-		this.add(b1);
+		this.add(b1,BorderLayout.WEST);
+		this.add(canvas,BorderLayout.CENTER);
+		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		
 	}
 	
-	private void setButton(JButton button) {
-		button.setFocusable(false);
-		b1.add(button);
-		b1.add(Box.createVerticalStrut(50));
+	
+	public void stateChange(buttonMode selectButton) {
+			
+			if(currentBtn == selectButton) {
+				selectButton.setSelected(true);
+			}
+			else {
+				if(currentBtn != null)
+				currentBtn.setSelected(false);
+				currentBtn = selectButton;
+				for(JButton i : buttonList) {
+					if(i.isSelected()) {
+						i.setBackground(new Color(0x2f4f4f));	
+					}
+					else {
+						i.setBackground(new Color(0x696969));
+						i.setSelected(false);
+					}
+				
+				}
+			}
+	}
+	
+	
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		
+		
 		
 	}
 	
