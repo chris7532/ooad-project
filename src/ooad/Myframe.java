@@ -30,9 +30,10 @@ public class Myframe extends JFrame implements ActionListener{
 		//frame setting
 		this.setTitle("Uml Editor");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(800,700);
+		this.setSize(1000,700);
 		this.setResizable(false);
 		this.setLayout(new BorderLayout());
+		//this.setLayout(null);
 		this.getContentPane().setBackground(Color.DARK_GRAY);
 		
 		//canvas
@@ -76,6 +77,8 @@ public class Myframe extends JFrame implements ActionListener{
 		
 		this.add(b1,BorderLayout.WEST);
 		this.add(canvas,BorderLayout.CENTER);
+		//this.add(b1);
+		//this.add(canvas);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		
@@ -84,24 +87,24 @@ public class Myframe extends JFrame implements ActionListener{
 	
 	public void stateChange(buttonMode selectButton) {
 			
-			if(currentBtn == selectButton) {
-				selectButton.setSelected(true);
-			}
-			else {
-				if(currentBtn != null)
-				currentBtn.setSelected(false);
-				currentBtn = selectButton;
-				for(JButton i : buttonList) {
-					if(i.isSelected()) {
-						i.setBackground(new Color(0x2f4f4f));	
-					}
-					else {
-						i.setBackground(new Color(0x696969));
-						i.setSelected(false);
-					}
-				
+		if(currentBtn == selectButton) {
+			selectButton.setSelected(true);
+		}
+		else {
+			if(currentBtn != null)
+			currentBtn.setSelected(false);
+			currentBtn = selectButton;
+			for(JButton i : buttonList) {
+				if(i.isSelected()) {
+					i.setBackground(new Color(0x2f4f4f));	
 				}
+				else {
+					i.setBackground(new Color(0x696969));
+					i.setSelected(false);
+				}
+			
 			}
+		}
 	}
 	
 	

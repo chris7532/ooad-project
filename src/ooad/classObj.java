@@ -6,30 +6,40 @@ import java.awt.Graphics2D;
 
 @SuppressWarnings("serial")
 public class classObj extends basicObj{
-	
-	classObj(Canvas canvas, int x1, int y1){
+	Canvas canvas;
+	classObj(Canvas canvas){
 		super(canvas);
+		this.canvas = canvas;
+		p1.setBounds(55, 0, 10, 10);
+		p2.setBounds(110,65, 10, 10);
+		p3.setBounds(55, 130, 10, 10);
+		p4.setBounds(0, 65, 10, 10);
 		
-		this.setVisible(true);
-		this.setOpaque(true);
-		this.setBackground(Color.black);
-		this.x1 = x1;
-		this.y1 = y1;
-		this.x2 = x1 + 100;
-		this.y2 = y1 + 120;
+		this.setSize(120,140);
+		//this.setLocation(x1, y1);
+		//this.setBackground(Color.white);
 		
 		
 	}
-	public void draw(Graphics g){
+	@Override
+	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		Graphics2D g2d = (Graphics2D)g;
-		g2d.setColor(Color.white);
-		g2d.setPaint(Color.white);
-		System.out.println(x1);
-		g2d.drawRect(x1, y1, 100, 120);
+		
+        g.setColor(Color.white);
+        g.drawRect(10, 10, 100, 120);
+        g.drawLine(10, 50, 110, 50);
+        g.drawLine(10, 90, 110, 90);
+        
+        
+        
+        
+		/*
 		int portion = 40;
-		g2d.drawLine(x1, y1 + portion, x2, y1 + portion);
-		g2d.drawLine(x1, y1 + portion * 2, x2, y1 + portion * 2);
+		g.setColor(Color.black);
+		g.drawRect(x1, y1, 100, 120);
+		g.drawLine(x1, y1 + portion, x2, y1 + portion);
+		g.drawLine(x1, y1 + portion * 2, x2, y1 + portion * 2);*/
 		
 	}	
+	
 }

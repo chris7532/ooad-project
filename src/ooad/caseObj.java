@@ -7,25 +7,25 @@ import java.awt.Graphics2D;
 @SuppressWarnings("serial")
 public class caseObj extends basicObj {
 
-	caseObj(Canvas canvas, int x1, int y1){
+	caseObj(Canvas canvas){
 		super(canvas);
 		
-		this.setVisible(true);
-		this.setOpaque(true);
-		this.setBackground(Color.black);
-		this.x1 = x1;
-		this.y1 = y1;
+		p1.setBounds(40, 0, 10, 10);
+		p2.setBounds(80, 30, 10, 10);
+		p3.setBounds(40, 60, 10, 10);
+		p4.setBounds(0, 30, 10, 10);
+		this.setSize(90,70);
 		
 		
-		
+			
 	}
 	@Override
-	public void draw(Graphics g) {
+	public void paintComponent(Graphics g) {
 		// TODO Auto-generated method stub
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setColor(Color.white);
-        g2d.drawOval(x1, y1, 70, 50);
+        g2d.drawOval(10, 10, 70, 50);
 	}
 
 }
