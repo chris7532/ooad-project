@@ -17,15 +17,31 @@ public class Canvas extends JLayeredPane implements MouseListener,MouseMotionLis
 	
 	
 	public Myframe frame;
+	// craeteObj point
 	private Point drawPoint;
+	// select window
 	public Point startPoint;
 	public Point dragPoint; 
 	public Point endPoint; 
 	public int windowWidth;
 	public int windowHeight;
+	// line tempPoints and ports
+	public Point tempStartPoint;
+	public Point tempEndPoint;
+	public Port tempStartPort;
+	public Port tempEndPort;
+	
+	public basicObj lineEndBlock;
 	
 	public ArrayList<basicObj> basicArray;
 	public ArrayList<basicObj>selectedObj;
+	public ArrayList<basicLine>lineArray;
+	
+	public ArrayList<Composition>groupArray;
+    public ArrayList<Composition> selectedComposition;
+	
+	public basicLine line;
+	
 	Canvas(Myframe frame){
 		
 		this.setOpaque(true);
@@ -36,6 +52,7 @@ public class Canvas extends JLayeredPane implements MouseListener,MouseMotionLis
 		this.frame = frame;
 		basicArray = new ArrayList<basicObj>();
 		selectedObj = new ArrayList<basicObj>();
+		lineArray = new ArrayList<basicLine>();
 		
 		
 	}
@@ -44,9 +61,36 @@ public class Canvas extends JLayeredPane implements MouseListener,MouseMotionLis
 	public void paint(Graphics g) {
 		super.paint(g);
 		drawWindow(g);
-		
+		drawLine(g);
 		
 	}
+	
+	public void setPosition() {
+		
+		tempStartPoint.x += tempStartPort.block.getLocation().x;
+		tempStartPoint.y += tempStartPort.block.getLocation().y;
+		tempEndPoint.x += tempEndPort.block.getLocation().x;
+		tempEndPoint.y += tempEndPort.block.getLocation().y;
+		
+		/*
+		line.lineStartPoint.x = lineStartBlock.getLocation().x + lineStartBlock.portArray[lineStartBlock.startPortNumber].getLocation().x;
+		line.lineStartPoint.y = lineStartBlock.getLocation().y + lineStartBlock.portArray[lineStartBlock.startPortNumber].getLocation().y;
+		line.lineEndPoint.x = lineEndBlock.getLocation().x + lineEndBlock.portArray[lineEndBlock.endPortNumber].getLocation().x;
+		line.lineEndPoint.y = lineEndBlock.getLocation().y + lineEndBlock.portArray[lineEndBlock.endPortNumber].getLocation().y;
+		
+		line.lineStartPort = lineStartBlock.portArray[lineStartBlock.startPortNumber];
+		line.lineEndPort = lineEndBlock.portArray[lineEndBlock.endPortNumber];
+		*/
+	}
+	
+	public void setChangedPosition() {
+		for(basicLine i :lineArray) {
+			i.lineStartPoint = SwingUtilities.convertPoint(i.lineStartPort.block, i.lineStartPort.getLocation().x, i.lineStartPort.getLocation().y, this);
+			i.lineEndPoint = SwingUtilities.convertPoint(i.lineEndPort.block, i.lineEndPort.getLocation().x, i.lineEndPort.getLocation().y, this);
+			
+		}
+	}
+	
 	public void drawWindow(Graphics g) {
 		if(startPoint !=null && dragPoint != null ) {
 			Graphics2D g2d = (Graphics2D)g;
@@ -57,6 +101,27 @@ public class Canvas extends JLayeredPane implements MouseListener,MouseMotionLis
 			g2d.fillRect(rect.x, rect.y, rect.width, rect.height);
 		}
 	}
+	public void drawLine(Graphics g) {
+		
+		if(!lineArray.isEmpty()) {
+			for(basicLine i : lineArray) {
+				
+				i.draw(g);
+			}
+		}
+		
+	}
+	
+	
+	public void group() {
+		Composition composite = new Composition(this);
+		this.add(composite,0);
+		groupArray.add(composite);
+		revalidate();
+        repaint();
+	}
+	
+	
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -81,6 +146,7 @@ public class Canvas extends JLayeredPane implements MouseListener,MouseMotionLis
 			basicArray.add(basic);
 		}
 		
+		
 	}
 
 	@Override
@@ -102,9 +168,17 @@ public class Canvas extends JLayeredPane implements MouseListener,MouseMotionLis
 			windowHeight = Math.abs(endPoint.y - startPoint.y);
 			for(basicObj i :basicArray) {
 				Point location = i.getLocation();
-				if(location.x > startPoint.x && location.x < (startPoint.x + windowWidth) && location.y > startPoint.y && location.y < (endPoint.y + windowHeight)) {
+				if(location.x > startPoint.x && location.x < (startPoint.x + windowWidth) && location.y > startPoint.y && location.y < (startPoint.y + windowHeight)) {
 					selectedObj.add(i);
 					}
+			}
+			for(Composition i :groupArray) {
+				Point location = i.getLocation();
+				if(location.x > startPoint.x && location.x < (startPoint.x + windowWidth) && location.y > startPoint.y && location.y < (startPoint.y + windowHeight)) {
+					selectedComposition.add(i);
+					}
+			}
+			
 			
 			for(basicObj j : selectedObj) {
 				j.showPort();
@@ -113,11 +187,18 @@ public class Canvas extends JLayeredPane implements MouseListener,MouseMotionLis
 				for(basicObj j : basicArray) {
 					j.hidePort();
 				}
-			}
-				
-				
-			}
+			}	
+			startPoint = null;
+			endPoint = null;
+			revalidate();
+			repaint();
+			
 		}
+		
+		
+		
+		
+		
 	}
 	
 

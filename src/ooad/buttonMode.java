@@ -26,6 +26,8 @@ public class buttonMode extends JButton{
         });
     }
     public void stateChange() {
+    	frame.canvas.startPoint = null;
+    	frame.canvas.endPoint = null;
     	this.setSelected(true);
     	frame.stateChange(this);
 		

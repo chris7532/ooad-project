@@ -10,10 +10,10 @@ public class caseObj extends basicObj {
 	caseObj(Canvas canvas){
 		super(canvas);
 		
-		p1.setBounds(40, 0, 10, 10);
-		p2.setBounds(80, 30, 10, 10);
-		p3.setBounds(40, 60, 10, 10);
-		p4.setBounds(0, 30, 10, 10);
+		portArray[0].setBounds(40, 0, 10, 10);
+		portArray[1].setBounds(80, 30, 10, 10);
+		portArray[2].setBounds(40, 60, 10, 10);
+		portArray[3].setBounds(0, 30, 10, 10);
 		this.setSize(90,70);
 		
 		

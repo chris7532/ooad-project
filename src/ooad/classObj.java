@@ -10,10 +10,10 @@ public class classObj extends basicObj{
 	classObj(Canvas canvas){
 		super(canvas);
 		this.canvas = canvas;
-		p1.setBounds(55, 0, 10, 10);
-		p2.setBounds(110,65, 10, 10);
-		p3.setBounds(55, 130, 10, 10);
-		p4.setBounds(0, 65, 10, 10);
+		portArray[0].setBounds(55, 0, 10, 10);
+		portArray[1].setBounds(110,65, 10, 10);
+		portArray[2].setBounds(55, 130, 10, 10);
+		portArray[3].setBounds(0, 65, 10, 10);
 		
 		this.setSize(120,140);
 		//this.setLocation(x1, y1);

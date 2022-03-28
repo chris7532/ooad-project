@@ -24,8 +24,13 @@ public class Myframe extends JFrame implements ActionListener{
 	buttonMode classes;
 	buttonMode useCase;
 	buttonMode currentBtn;
+	Canvas canvas;
 	
-	
+	JMenuItem saveItem;
+	JMenuItem exitItem;
+	JMenuItem groupItem; 
+	JMenuItem ungroupItem; 
+	JMenuItem editItem; 
 	Myframe(){
 		//frame setting
 		this.setTitle("Uml Editor");
@@ -37,7 +42,7 @@ public class Myframe extends JFrame implements ActionListener{
 		this.getContentPane().setBackground(Color.DARK_GRAY);
 		
 		//canvas
-		Canvas canvas = new Canvas(this);
+		canvas = new Canvas(this);
 		
 		//menuBar
 		JMenuBar menuBar = new JMenuBar();
@@ -45,17 +50,20 @@ public class Myframe extends JFrame implements ActionListener{
 		JMenu fileMenu = new JMenu("File");
 		JMenu editMenu = new JMenu("Edit");
 		
-		JMenuItem saveItem = new JMenuItem("Save");
-		JMenuItem exitItem = new JMenuItem("Exit");
-		JMenuItem groupItem = new JMenuItem("Group");
+		saveItem = new JMenuItem("Save");
+		exitItem = new JMenuItem("Exit");
+		groupItem = new JMenuItem("Group");
+		ungroupItem = new JMenuItem("UnGroup");
+		editItem = new JMenuItem("change object name");
+		
 		
 		//button
-		sltButton = new buttonMode(this,new ImageIcon("select.png"),b1);
-		assButton = new buttonMode(this,new ImageIcon("associate.png"),b1);
-		genButton = new buttonMode(this, new ImageIcon("general.png"),b1);
-		comButton = new buttonMode(this, new ImageIcon("composite.png"),b1);
-		classes = new buttonMode(this, new ImageIcon("class.png"),b1);
-		useCase = new buttonMode(this, new ImageIcon("usecase.png"),b1);
+		sltButton = new buttonMode(this,new ImageIcon("img/select.png"),b1);
+		assButton = new buttonMode(this,new ImageIcon("img/associate.png"),b1);
+		genButton = new buttonMode(this, new ImageIcon("img/general.png"),b1);
+		comButton = new buttonMode(this, new ImageIcon("img/composite.png"),b1);
+		classes = new buttonMode(this, new ImageIcon("img/class.png"),b1);
+		useCase = new buttonMode(this, new ImageIcon("img/usecase.png"),b1);
 		
 		buttonList = new ArrayList<buttonMode>();
 		buttonList.add(sltButton);
@@ -66,12 +74,17 @@ public class Myframe extends JFrame implements ActionListener{
 		buttonList.add(useCase);
 		
 
-		
 		menuBar.add(fileMenu);
 		menuBar.add(editMenu);
 		fileMenu.add(saveItem);
 		fileMenu.add(exitItem);
 		editMenu.add(groupItem);
+		editMenu.add(ungroupItem);
+		editMenu.add(editItem);
+		
+		groupItem.addActionListener(this);
+		ungroupItem.addActionListener(this);
+		editItem.addActionListener(this);
 		this.setJMenuBar(menuBar);
 			
 		
@@ -112,6 +125,15 @@ public class Myframe extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
+		if(e.getSource() == groupItem) {
+			canvas.group();
+		}
+		if(e.getSource() == ungroupItem) {
+			
+		}
+		if(e.getSource() == editItem) {
+			
+		}
 		
 		
 		
