@@ -21,7 +21,7 @@ public class basicObj extends JPanel implements MouseListener, MouseMotionListen
 	public int depth;
 	public Point objStart;
 	public Point objDrag;
-	
+
 	protected String objectName = "Object Name";
 	protected Font font = new Font(Font.DIALOG, Font.BOLD, 14);
 
@@ -185,8 +185,7 @@ public class basicObj extends JPanel implements MouseListener, MouseMotionListen
 		if (canvas.frame.currentBtn == canvas.frame.sltButton && parentComp != null) {
 			findParent().getStartPoint();
 		}
-		
-		
+
 		if (canvas.frame.currentBtn == canvas.frame.sltButton) {
 			objStart = new Point(e.getPoint().x + this.getLocation().x, e.getPoint().y + this.getLocation().y);
 			// this.setLocation(movePoint);

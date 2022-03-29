@@ -11,9 +11,8 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-
 @SuppressWarnings("serial")
-public class Myframe extends JFrame implements ActionListener{
+public class Myframe extends JFrame implements ActionListener {
 
 	Box b1 = Box.createVerticalBox();
 	public ArrayList<buttonMode> buttonList;
@@ -25,46 +24,46 @@ public class Myframe extends JFrame implements ActionListener{
 	buttonMode useCase;
 	buttonMode currentBtn;
 	Canvas canvas;
-	
+
 	JMenuItem saveItem;
 	JMenuItem exitItem;
-	JMenuItem groupItem; 
-	JMenuItem ungroupItem; 
-	JMenuItem editItem; 
-	Myframe(){
-		//frame setting
+	JMenuItem groupItem;
+	JMenuItem ungroupItem;
+	JMenuItem editItem;
+
+	Myframe() {
+		// frame setting
 		this.setTitle("Uml Editor");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(1200,700);
+		this.setSize(1200, 700);
 		this.setResizable(false);
 		this.setLayout(new BorderLayout());
-		//this.setLayout(null);
+		// this.setLayout(null);
 		this.getContentPane().setBackground(Color.DARK_GRAY);
-		
-		//canvas
+
+		// canvas
 		canvas = new Canvas(this);
-		
-		//menuBar
+
+		// menuBar
 		JMenuBar menuBar = new JMenuBar();
-		
+
 		JMenu fileMenu = new JMenu("File");
 		JMenu editMenu = new JMenu("Edit");
-		
+
 		saveItem = new JMenuItem("Save");
 		exitItem = new JMenuItem("Exit");
 		groupItem = new JMenuItem("Group");
 		ungroupItem = new JMenuItem("UnGroup");
 		editItem = new JMenuItem("change object name");
-		
-		
-		//button
-		sltButton = new buttonMode(this,new ImageIcon("img/select.png"),b1);
-		assButton = new buttonMode(this,new ImageIcon("img/associate.png"),b1);
-		genButton = new buttonMode(this, new ImageIcon("img/general.png"),b1);
-		comButton = new buttonMode(this, new ImageIcon("img/composite.png"),b1);
-		classes = new buttonMode(this, new ImageIcon("img/class.png"),b1);
-		useCase = new buttonMode(this, new ImageIcon("img/usecase.png"),b1);
-		
+
+		// button
+		sltButton = new buttonMode(this, new ImageIcon("img/select.png"), b1);
+		assButton = new buttonMode(this, new ImageIcon("img/associate.png"), b1);
+		genButton = new buttonMode(this, new ImageIcon("img/general.png"), b1);
+		comButton = new buttonMode(this, new ImageIcon("img/composite.png"), b1);
+		classes = new buttonMode(this, new ImageIcon("img/class.png"), b1);
+		useCase = new buttonMode(this, new ImageIcon("img/usecase.png"), b1);
+
 		buttonList = new ArrayList<buttonMode>();
 		buttonList.add(sltButton);
 		buttonList.add(assButton);
@@ -72,7 +71,6 @@ public class Myframe extends JFrame implements ActionListener{
 		buttonList.add(comButton);
 		buttonList.add(classes);
 		buttonList.add(useCase);
-		
 
 		menuBar.add(fileMenu);
 		menuBar.add(editMenu);
@@ -81,77 +79,67 @@ public class Myframe extends JFrame implements ActionListener{
 		editMenu.add(groupItem);
 		editMenu.add(ungroupItem);
 		editMenu.add(editItem);
-		
+
 		groupItem.addActionListener(this);
 		ungroupItem.addActionListener(this);
 		editItem.addActionListener(this);
 		this.setJMenuBar(menuBar);
-			
-		
-		this.add(b1,BorderLayout.WEST);
-		this.add(canvas,BorderLayout.CENTER);
-		//this.add(b1);
-		//this.add(canvas);
+
+		this.add(b1, BorderLayout.WEST);
+		this.add(canvas, BorderLayout.CENTER);
+		// this.add(b1);
+		// this.add(canvas);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
-		
+
 	}
-	
-	
+
 	public void stateChange(buttonMode selectButton) {
-			
-		if(currentBtn == selectButton) {
+
+		if (currentBtn == selectButton) {
 			selectButton.setSelected(true);
-		}
-		else {
-			if(currentBtn != null)
-			currentBtn.setSelected(false);
+		} else {
+			if (currentBtn != null)
+				currentBtn.setSelected(false);
 			currentBtn = selectButton;
-			for(JButton i : buttonList) {
-				if(i.isSelected()) {
-					i.setBackground(new Color(0x2f4f4f));	
-				}
-				else {
+			for (JButton i : buttonList) {
+				if (i.isSelected()) {
+					i.setBackground(new Color(0x2f4f4f));
+				} else {
 					i.setBackground(new Color(0x696969));
 					i.setSelected(false);
 				}
-			
+
 			}
 		}
 	}
-	
-	
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-		if(e.getSource() == groupItem) {
+
+		if (e.getSource() == groupItem) {
 			canvas.group();
 		}
-		if(e.getSource() == ungroupItem) {
+		if (e.getSource() == ungroupItem) {
 			canvas.unGroup();
 		}
-		if(e.getSource() == editItem) {
-			
-			if(canvas.selectedObj.isEmpty()) {
+		if (e.getSource() == editItem) {
+
+			if (canvas.selectedObj.isEmpty()) {
 				JOptionPane.showMessageDialog(getParent(), "No Object selected!!");
-                return;
-			}
-			else if(canvas.selectedObj.size() > 1) {
+				return;
+			} else if (canvas.selectedObj.size() > 1) {
 				JOptionPane.showMessageDialog(getParent(), "Please choose only one object!!");
-                return;
-			}
-			else {
+				return;
+			} else {
 				String name = JOptionPane.showInputDialog(getParent(), "Change object name", null);
 				canvas.selectedObj.get(0).objectName = name;
 				canvas.repaint();
-				
+
 			}
-			
+
 		}
-		
-		
-		
+
 	}
-	
+
 }

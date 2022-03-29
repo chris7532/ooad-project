@@ -39,9 +39,9 @@ public class Canvas extends JLayeredPane implements MouseListener, MouseMotionLi
 	public ArrayList<Composition> groupArray;
 	public ArrayList<Composition> selectedComposition;
 	public Composition selectedGroup;
-	
+
 	public basicLine line;
-	
+
 	Canvas(Myframe frame) {
 
 		this.setOpaque(true);
@@ -133,31 +133,26 @@ public class Canvas extends JLayeredPane implements MouseListener, MouseMotionLi
 		repaint();
 
 	}
+
 	/*
+	 * public void unGroup() { if (selectedGroup == null) return; for (basicObj i :
+	 * selectedGroup.subBlock) i.parentComp = null; for (Composition i :
+	 * selectedGroup.subComposite) i.parent = null; remove(selectedGroup);
+	 * selectedGroup = null; revalidate(); repaint(); }
+	 */
 	public void unGroup() {
-        if (selectedGroup == null)
-            return;
-        for (basicObj i : selectedGroup.subBlock)
-            i.parentComp = null;
-        for (Composition i : selectedGroup.subComposite)
-            i.parent = null;
-        remove(selectedGroup);
-        selectedGroup = null;
-        revalidate();
-        repaint();
-    }*/
-	public void unGroup() {
-        if (selectedGroup == null)
-            return;
-        for (basicObj i : selectedGroup.subBlock)
-            i.parentComp = null;
-        for (Composition i : selectedGroup.subComposite)
-            i.parent = null;
-        remove(selectedGroup);
-        selectedGroup = null;
-        revalidate();
-        repaint();
-    }
+		if (selectedGroup == null)
+			return;
+		for (basicObj i : selectedGroup.subBlock)
+			i.parentComp = null;
+		for (Composition i : selectedGroup.subComposite)
+			i.parent = null;
+		remove(selectedGroup);
+		selectedGroup = null;
+		revalidate();
+		repaint();
+	}
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
