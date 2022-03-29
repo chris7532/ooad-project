@@ -2,13 +2,11 @@ package ooad;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -246,7 +244,7 @@ public class basicObj extends JPanel implements MouseListener, MouseMotionListen
 	public void mouseDragged(MouseEvent e) {
 		if (canvas.frame.currentBtn == canvas.frame.sltButton && parentComp == null) {
 			canvas.moveToFront(this);
-			objDrag = new Point(e.getPoint().x + this.getLocation().x, e.getPoint().y + this.getLocation().y);
+			objDrag = new Point(e.getPoint().x + this.getLocation().x - moveStartPoint.x, e.getPoint().y + this.getLocation().y - moveStartPoint.y);// fix location by minus moveStarPoint
 			this.setLocation(objDrag);
 
 			canvas.setChangedPosition();
@@ -254,7 +252,7 @@ public class basicObj extends JPanel implements MouseListener, MouseMotionListen
 
 		}
 		if (canvas.frame.currentBtn == canvas.frame.sltButton && parentComp != null) {
-			findParent().move();
+			findParent().moveOutside();
 
 		}
 

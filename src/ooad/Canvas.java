@@ -195,10 +195,16 @@ public class Canvas extends JLayeredPane implements MouseListener, MouseMotionLi
 			endPoint = e.getPoint();
 			windowWidth = Math.abs(endPoint.x - startPoint.x);
 			windowHeight = Math.abs(endPoint.y - startPoint.y);
+			int xMin,xMax,yMin,yMax;
+			xMin = Math.min(startPoint.x, endPoint.x);
+			xMax = xMin + windowWidth;
+			yMin = Math.min(startPoint.y, endPoint.y);
+			yMax = yMin +  windowHeight;
+					
 			for (basicObj i : basicArray) {
 				Point location = i.getLocation();
-				if (location.x > startPoint.x && location.x < (startPoint.x + windowWidth) && location.y > startPoint.y
-						&& location.y < (startPoint.y + windowHeight)) {
+				if (location.x > xMin && location.x < xMax && location.y > yMin
+						&& location.y < yMax) {
 
 					if (i.parentComp == null)
 						selectedObj.add(i);
@@ -206,6 +212,8 @@ public class Canvas extends JLayeredPane implements MouseListener, MouseMotionLi
 						Composition tmp = i.findParent();
 						if (!selectedComposition.contains(tmp))
 							selectedComposition.add(tmp);
+						
+						
 					}
 
 				}
