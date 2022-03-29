@@ -30,6 +30,10 @@ public class classObj extends basicObj{
         g.drawLine(10, 50, 110, 50);
         g.drawLine(10, 90, 110, 90);
         
+        int stringWidth = g.getFontMetrics(font).stringWidth(objectName);
+		double empty = (60 - stringWidth)/2;
+		g.setFont(font);	
+		g.drawString(objectName, 30 + (int)empty, 10 + 25);
         
         
         

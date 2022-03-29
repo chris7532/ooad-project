@@ -13,16 +13,15 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 @SuppressWarnings("serial")
-public class Canvas extends JLayeredPane implements MouseListener,MouseMotionListener {
-	
-	
+public class Canvas extends JLayeredPane implements MouseListener, MouseMotionListener {
+
 	public Myframe frame;
 	// craeteObj point
 	private Point drawPoint;
 	// select window
 	public Point startPoint;
-	public Point dragPoint; 
-	public Point endPoint; 
+	public Point dragPoint;
+	public Point endPoint;
 	public int windowWidth;
 	public int windowHeight;
 	// line tempPoints and ports
@@ -30,20 +29,21 @@ public class Canvas extends JLayeredPane implements MouseListener,MouseMotionLis
 	public Point tempEndPoint;
 	public Port tempStartPort;
 	public Port tempEndPort;
-	
+
 	public basicObj lineEndBlock;
-	
+
 	public ArrayList<basicObj> basicArray;
-	public ArrayList<basicObj>selectedObj;
-	public ArrayList<basicLine>lineArray;
-	
-	public ArrayList<Composition>groupArray;
-    public ArrayList<Composition> selectedComposition;
+	public ArrayList<basicObj> selectedObj;
+	public ArrayList<basicLine> lineArray;
+
+	public ArrayList<Composition> groupArray;
+	public ArrayList<Composition> selectedComposition;
+	public Composition selectedGroup;
 	
 	public basicLine line;
 	
-	Canvas(Myframe frame){
-		
+	Canvas(Myframe frame) {
+
 		this.setOpaque(true);
 		this.setLayout(null);
 		this.addMouseListener(this);
@@ -52,92 +52,126 @@ public class Canvas extends JLayeredPane implements MouseListener,MouseMotionLis
 		this.frame = frame;
 		basicArray = new ArrayList<basicObj>();
 		selectedObj = new ArrayList<basicObj>();
+		groupArray = new ArrayList<Composition>();
+		selectedComposition = new ArrayList<Composition>();
 		lineArray = new ArrayList<basicLine>();
-		
-		
+		selectedGroup = null;
+		lineEndBlock = null;
+
 	}
-	
+
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
 		drawWindow(g);
 		drawLine(g);
-		
+
 	}
-	
+
 	public void setPosition() {
-		
+
 		tempStartPoint.x += tempStartPort.block.getLocation().x;
 		tempStartPoint.y += tempStartPort.block.getLocation().y;
 		tempEndPoint.x += tempEndPort.block.getLocation().x;
 		tempEndPoint.y += tempEndPort.block.getLocation().y;
-		
+
 		/*
-		line.lineStartPoint.x = lineStartBlock.getLocation().x + lineStartBlock.portArray[lineStartBlock.startPortNumber].getLocation().x;
-		line.lineStartPoint.y = lineStartBlock.getLocation().y + lineStartBlock.portArray[lineStartBlock.startPortNumber].getLocation().y;
-		line.lineEndPoint.x = lineEndBlock.getLocation().x + lineEndBlock.portArray[lineEndBlock.endPortNumber].getLocation().x;
-		line.lineEndPoint.y = lineEndBlock.getLocation().y + lineEndBlock.portArray[lineEndBlock.endPortNumber].getLocation().y;
-		
-		line.lineStartPort = lineStartBlock.portArray[lineStartBlock.startPortNumber];
-		line.lineEndPort = lineEndBlock.portArray[lineEndBlock.endPortNumber];
-		*/
+		 * line.lineStartPoint.x = lineStartBlock.getLocation().x +
+		 * lineStartBlock.portArray[lineStartBlock.startPortNumber].getLocation().x;
+		 * line.lineStartPoint.y = lineStartBlock.getLocation().y +
+		 * lineStartBlock.portArray[lineStartBlock.startPortNumber].getLocation().y;
+		 * line.lineEndPoint.x = lineEndBlock.getLocation().x +
+		 * lineEndBlock.portArray[lineEndBlock.endPortNumber].getLocation().x;
+		 * line.lineEndPoint.y = lineEndBlock.getLocation().y +
+		 * lineEndBlock.portArray[lineEndBlock.endPortNumber].getLocation().y;
+		 * 
+		 * line.lineStartPort =
+		 * lineStartBlock.portArray[lineStartBlock.startPortNumber]; line.lineEndPort =
+		 * lineEndBlock.portArray[lineEndBlock.endPortNumber];
+		 */
 	}
-	
+
 	public void setChangedPosition() {
-		for(basicLine i :lineArray) {
-			i.lineStartPoint = SwingUtilities.convertPoint(i.lineStartPort.block, i.lineStartPort.getLocation().x, i.lineStartPort.getLocation().y, this);
-			i.lineEndPoint = SwingUtilities.convertPoint(i.lineEndPort.block, i.lineEndPort.getLocation().x, i.lineEndPort.getLocation().y, this);
-			
+		for (basicLine i : lineArray) {
+			i.lineStartPoint = SwingUtilities.convertPoint(i.lineStartPort.block, i.lineStartPort.getLocation().x,
+					i.lineStartPort.getLocation().y, this);
+			i.lineEndPoint = SwingUtilities.convertPoint(i.lineEndPort.block, i.lineEndPort.getLocation().x,
+					i.lineEndPort.getLocation().y, this);
+
 		}
 	}
-	
+
 	public void drawWindow(Graphics g) {
-		if(startPoint !=null && dragPoint != null ) {
-			Graphics2D g2d = (Graphics2D)g;
-			//g2d.drawRect(startPoint, dragPoint, windowWidth, windowHeight);
-			Rectangle rect= new Rectangle(startPoint);
+		if (startPoint != null && dragPoint != null) {
+			Graphics2D g2d = (Graphics2D) g;
+			// g2d.drawRect(startPoint, dragPoint, windowWidth, windowHeight);
+			Rectangle rect = new Rectangle(startPoint);
 			rect.add(dragPoint);
-			g2d.setColor(new Color(30,144,255,30));
+			g2d.setColor(new Color(30, 144, 255, 30));
 			g2d.fillRect(rect.x, rect.y, rect.width, rect.height);
 		}
 	}
+
 	public void drawLine(Graphics g) {
-		
-		if(!lineArray.isEmpty()) {
-			for(basicLine i : lineArray) {
-				
+
+		if (!lineArray.isEmpty()) {
+			for (basicLine i : lineArray) {
+
 				i.draw(g);
 			}
 		}
-		
+
 	}
-	
-	
+
 	public void group() {
-		Composition composite = new Composition(this);
-		this.add(composite,0);
+		if (selectedObj.isEmpty() && selectedComposition.isEmpty())
+			return;
+		Composition composite = new Composition(this, selectedObj, selectedComposition);
+		add(composite);
 		groupArray.add(composite);
 		revalidate();
-        repaint();
+		repaint();
+
 	}
-	
-	
-	
+	/*
+	public void unGroup() {
+        if (selectedGroup == null)
+            return;
+        for (basicObj i : selectedGroup.subBlock)
+            i.parentComp = null;
+        for (Composition i : selectedGroup.subComposite)
+            i.parent = null;
+        remove(selectedGroup);
+        selectedGroup = null;
+        revalidate();
+        repaint();
+    }*/
+	public void unGroup() {
+        if (selectedGroup == null)
+            return;
+        for (basicObj i : selectedGroup.subBlock)
+            i.parentComp = null;
+        for (Composition i : selectedGroup.subComposite)
+            i.parent = null;
+        remove(selectedGroup);
+        selectedGroup = null;
+        revalidate();
+        repaint();
+    }
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		if(frame.currentBtn == frame.classes) {
+		if (frame.currentBtn == frame.classes) {
 			System.out.println(e.getX() + "," + e.getY());
 			drawPoint = new Point(e.getPoint());
 			basicObj basic = new classObj(this);
 			this.add(basic, 0);
-			//basic.setLocation(drawPoint.x, drawPoint.y);
+			// basic.setLocation(drawPoint.x, drawPoint.y);
 			basic.setLocation(drawPoint);
 			basicArray.add(basic);
-			
-			
+
 		}
-		if(frame.currentBtn == frame.useCase) {
+		if (frame.currentBtn == frame.useCase) {
 			System.out.println(e.getX() + "," + e.getY());
 			drawPoint = new Point(e.getPoint());
 			basicObj basic = new caseObj(this);
@@ -145,8 +179,7 @@ public class Canvas extends JLayeredPane implements MouseListener,MouseMotionLis
 			basic.setLocation(drawPoint);
 			basicArray.add(basic);
 		}
-		
-		
+
 	}
 
 	@Override
@@ -154,6 +187,7 @@ public class Canvas extends JLayeredPane implements MouseListener,MouseMotionLis
 		// TODO Auto-generated method stub
 		if (frame.currentBtn == frame.sltButton) {
 			selectedObj.clear();
+			selectedComposition.clear();
 			startPoint = e.getPoint();
 			System.out.println(startPoint);
 		}
@@ -166,41 +200,38 @@ public class Canvas extends JLayeredPane implements MouseListener,MouseMotionLis
 			endPoint = e.getPoint();
 			windowWidth = Math.abs(endPoint.x - startPoint.x);
 			windowHeight = Math.abs(endPoint.y - startPoint.y);
-			for(basicObj i :basicArray) {
+			for (basicObj i : basicArray) {
 				Point location = i.getLocation();
-				if(location.x > startPoint.x && location.x < (startPoint.x + windowWidth) && location.y > startPoint.y && location.y < (startPoint.y + windowHeight)) {
-					selectedObj.add(i);
+				if (location.x > startPoint.x && location.x < (startPoint.x + windowWidth) && location.y > startPoint.y
+						&& location.y < (startPoint.y + windowHeight)) {
+
+					if (i.parentComp == null)
+						selectedObj.add(i);
+					else {
+						Composition tmp = i.findParent();
+						if (!selectedComposition.contains(tmp))
+							selectedComposition.add(tmp);
 					}
+
+				}
 			}
-			for(Composition i :groupArray) {
-				Point location = i.getLocation();
-				if(location.x > startPoint.x && location.x < (startPoint.x + windowWidth) && location.y > startPoint.y && location.y < (startPoint.y + windowHeight)) {
-					selectedComposition.add(i);
-					}
-			}
-			
-			
-			for(basicObj j : selectedObj) {
+
+			for (basicObj j : selectedObj) {
 				j.showPort();
 			}
-			if(selectedObj.isEmpty()) {
-				for(basicObj j : basicArray) {
+			if (selectedObj.isEmpty()) {
+				for (basicObj j : basicArray) {
 					j.hidePort();
 				}
-			}	
+			}
 			startPoint = null;
 			endPoint = null;
 			revalidate();
 			repaint();
-			
+
 		}
-		
-		
-		
-		
-		
+
 	}
-	
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
@@ -213,18 +244,19 @@ public class Canvas extends JLayeredPane implements MouseListener,MouseMotionLis
 		// TODO Auto-generated method stub
 
 	}
+
 	@Override
-    public void mouseDragged(MouseEvent e) {
+	public void mouseDragged(MouseEvent e) {
 		if (frame.currentBtn == frame.sltButton) {
 			dragPoint = e.getPoint();
 			repaint();
 		}
-		
-    }
 
-    @Override
-    public void mouseMoved(MouseEvent e) {
+	}
 
-    }
+	@Override
+	public void mouseMoved(MouseEvent e) {
+
+	}
 
 }

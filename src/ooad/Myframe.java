@@ -35,7 +35,7 @@ public class Myframe extends JFrame implements ActionListener{
 		//frame setting
 		this.setTitle("Uml Editor");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(1000,700);
+		this.setSize(1200,700);
 		this.setResizable(false);
 		this.setLayout(new BorderLayout());
 		//this.setLayout(null);
@@ -129,9 +129,24 @@ public class Myframe extends JFrame implements ActionListener{
 			canvas.group();
 		}
 		if(e.getSource() == ungroupItem) {
-			
+			canvas.unGroup();
 		}
 		if(e.getSource() == editItem) {
+			
+			if(canvas.selectedObj.isEmpty()) {
+				JOptionPane.showMessageDialog(getParent(), "No Object selected!!");
+                return;
+			}
+			else if(canvas.selectedObj.size() > 1) {
+				JOptionPane.showMessageDialog(getParent(), "Please choose only one object!!");
+                return;
+			}
+			else {
+				String name = JOptionPane.showInputDialog(getParent(), "Change object name", null);
+				canvas.selectedObj.get(0).objectName = name;
+				canvas.repaint();
+				
+			}
 			
 		}
 		
