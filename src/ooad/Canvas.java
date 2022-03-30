@@ -75,36 +75,55 @@ public class Canvas extends JLayeredPane implements MouseListener, MouseMotionLi
 		tempEndPoint.x += tempEndPort.block.getLocation().x;
 		tempEndPoint.y += tempEndPort.block.getLocation().y;
 
-		/*
-		 * line.lineStartPoint.x = lineStartBlock.getLocation().x +
-		 * lineStartBlock.portArray[lineStartBlock.startPortNumber].getLocation().x;
-		 * line.lineStartPoint.y = lineStartBlock.getLocation().y +
-		 * lineStartBlock.portArray[lineStartBlock.startPortNumber].getLocation().y;
-		 * line.lineEndPoint.x = lineEndBlock.getLocation().x +
-		 * lineEndBlock.portArray[lineEndBlock.endPortNumber].getLocation().x;
-		 * line.lineEndPoint.y = lineEndBlock.getLocation().y +
-		 * lineEndBlock.portArray[lineEndBlock.endPortNumber].getLocation().y;
-		 * 
-		 * line.lineStartPort =
-		 * lineStartBlock.portArray[lineStartBlock.startPortNumber]; line.lineEndPort =
-		 * lineEndBlock.portArray[lineEndBlock.endPortNumber];
-		 */
 	}
 
 	public void setChangedPosition() {
 		for (basicLine i : lineArray) {
 			i.lineStartPoint = SwingUtilities.convertPoint(i.lineStartPort.block, i.lineStartPort.getLocation().x,
 					i.lineStartPort.getLocation().y, this);
+			// 校正 port location
+			if (i.startPortNumber == 0) {
+				i.lineStartPoint.x += 5;
+				i.lineStartPoint.y += 10;
+			}
+			if (i.startPortNumber == 1) {
+
+				i.lineStartPoint.y += 5;
+			}
+			if (i.startPortNumber == 2) {
+
+				i.lineStartPoint.x += 5;
+			}
+			if (i.startPortNumber == 3) {
+				i.lineStartPoint.x += 10;
+				i.lineStartPoint.y += 5;
+			}
+
 			i.lineEndPoint = SwingUtilities.convertPoint(i.lineEndPort.block, i.lineEndPort.getLocation().x,
 					i.lineEndPort.getLocation().y, this);
+			// 校正 port location
+			if (i.endPortNumber == 0) {
+				i.lineEndPoint.x += 5;
+				i.lineEndPoint.y += 10;
+			}
+			if (i.endPortNumber == 1) {
 
+				i.lineEndPoint.y += 5;
+			}
+			if (i.endPortNumber == 2) {
+
+				i.lineEndPoint.x += 5;
+			}
+			if (i.endPortNumber == 3) {
+				i.lineEndPoint.x += 10;
+				i.lineEndPoint.y += 5;
+			}
 		}
 	}
 
 	public void drawWindow(Graphics g) {
 		if (startPoint != null && dragPoint != null) {
 			Graphics2D g2d = (Graphics2D) g;
-			// g2d.drawRect(startPoint, dragPoint, windowWidth, windowHeight);
 			Rectangle rect = new Rectangle(startPoint);
 			rect.add(dragPoint);
 			g2d.setColor(new Color(30, 144, 255, 30));
@@ -134,12 +153,6 @@ public class Canvas extends JLayeredPane implements MouseListener, MouseMotionLi
 
 	}
 
-	/*
-	 * public void unGroup() { if (selectedGroup == null) return; for (basicObj i :
-	 * selectedGroup.subBlock) i.parentComp = null; for (Composition i :
-	 * selectedGroup.subComposite) i.parent = null; remove(selectedGroup);
-	 * selectedGroup = null; revalidate(); repaint(); }
-	 */
 	public void unGroup() {
 		if (selectedGroup == null)
 			return;
@@ -157,17 +170,14 @@ public class Canvas extends JLayeredPane implements MouseListener, MouseMotionLi
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		if (frame.currentBtn == frame.classes) {
-			System.out.println(e.getX() + "," + e.getY());
 			drawPoint = new Point(e.getPoint());
 			basicObj basic = new classObj(this);
 			this.add(basic, 0);
-			// basic.setLocation(drawPoint.x, drawPoint.y);
 			basic.setLocation(drawPoint);
 			basicArray.add(basic);
 
 		}
 		if (frame.currentBtn == frame.useCase) {
-			System.out.println(e.getX() + "," + e.getY());
 			drawPoint = new Point(e.getPoint());
 			basicObj basic = new caseObj(this);
 			this.add(basic, 0);
@@ -184,7 +194,6 @@ public class Canvas extends JLayeredPane implements MouseListener, MouseMotionLi
 			selectedObj.clear();
 			selectedComposition.clear();
 			startPoint = e.getPoint();
-			System.out.println(startPoint);
 		}
 	}
 
@@ -195,16 +204,19 @@ public class Canvas extends JLayeredPane implements MouseListener, MouseMotionLi
 			endPoint = e.getPoint();
 			windowWidth = Math.abs(endPoint.x - startPoint.x);
 			windowHeight = Math.abs(endPoint.y - startPoint.y);
-			int xMin,xMax,yMin,yMax;
+			int xMin, xMax, yMin, yMax;
 			xMin = Math.min(startPoint.x, endPoint.x);
 			xMax = xMin + windowWidth;
 			yMin = Math.min(startPoint.y, endPoint.y);
-			yMax = yMin +  windowHeight;
-					
+			yMax = yMin + windowHeight;
+
 			for (basicObj i : basicArray) {
 				Point location = i.getLocation();
-				if (location.x > xMin && location.x < xMax && location.y > yMin
-						&& location.y < yMax) {
+				Point location2 = new Point(i.getLocation().x + i.getSize().width,
+						i.getLocation().y + i.getSize().height);
+				
+				if (location.x > xMin && location.x < xMax && location.y > yMin && location.y < yMax
+						&& location2.x > xMin && location2.x < xMax && location2.y > yMin && location2.y < yMax) {
 
 					if (i.parentComp == null)
 						selectedObj.add(i);
@@ -212,8 +224,7 @@ public class Canvas extends JLayeredPane implements MouseListener, MouseMotionLi
 						Composition tmp = i.findParent();
 						if (!selectedComposition.contains(tmp))
 							selectedComposition.add(tmp);
-						
-						
+
 					}
 
 				}

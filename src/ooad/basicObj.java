@@ -58,10 +58,6 @@ public class basicObj extends JPanel implements MouseListener, MouseMotionListen
 		this.setBackground(Color.DARK_GRAY);
 		this.setOpaque(true);
 
-		// this.setBackground(Color.gray);
-		// depth = canvas.basicArray.isEmpty()? 99 : 99-canvas.basicArray.size();
-
-		// canvas.moveToFront(this);
 	}
 
 	public void hidePort() {
@@ -103,16 +99,6 @@ public class basicObj extends JPanel implements MouseListener, MouseMotionListen
 		}
 	}
 
-	/*
-	 * public void chooseEndPort(MouseEvent e) { //Point endPoint = e.getPoint();
-	 * //relative to basicObj panel Point endPoint =
-	 * MouseInfo.getPointerInfo().getLocation();
-	 * SwingUtilities.convertPointFromScreen(endPoint, canvas); for(int j=0;j<4;j++)
-	 * { distanceToPort[j] = Math.sqrt( Math.pow(portArray[j].getLocation().x-
-	 * endPoint.x, 2) + Math.pow(portArray[j].getLocation().y-endPoint.y, 2)); }
-	 * double min = 10000; for(int i=0;i<4;i++) { if(distanceToPort[i] < min) { min
-	 * = distanceToPort[i]; endPortNumber = i; } } }
-	 */
 	public void addLine() {
 
 		if (canvas.frame.currentBtn == canvas.frame.assButton)
@@ -130,9 +116,10 @@ public class basicObj extends JPanel implements MouseListener, MouseMotionListen
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (canvas.frame.currentBtn == canvas.frame.assButton || canvas.frame.currentBtn == canvas.frame.genButton
-				|| canvas.frame.currentBtn == canvas.frame.comButton && canvas.lineEndBlock != null) {
-			// canvas.lineEndBlock.chooseEndPort(e);
+		if ((canvas.frame.currentBtn == canvas.frame.assButton || canvas.frame.currentBtn == canvas.frame.genButton
+				|| canvas.frame.currentBtn == canvas.frame.comButton) && canvas.lineEndBlock != null
+				&& canvas.lineEndBlock != this) {
+
 			basicObj lineEndBlock = canvas.lineEndBlock;
 			Point endPoint = MouseInfo.getPointerInfo().getLocation();
 			SwingUtilities.convertPointFromScreen(endPoint, canvas);
@@ -153,6 +140,23 @@ public class basicObj extends JPanel implements MouseListener, MouseMotionListen
 			}
 
 			canvas.tempEndPoint = lineEndBlock.portArray[lineEndBlock.endPortNumber].getLocation();
+			// ®Õ¥¿port location
+			if (lineEndBlock.endPortNumber == 0) {
+				canvas.tempEndPoint.x += 5;
+				canvas.tempEndPoint.y += 10;
+			}
+			if (lineEndBlock.endPortNumber == 1) {
+
+				canvas.tempEndPoint.y += 5;
+			}
+			if (lineEndBlock.endPortNumber == 2) {
+
+				canvas.tempEndPoint.x += 5;
+			}
+			if (lineEndBlock.endPortNumber == 3) {
+				canvas.tempEndPoint.x += 10;
+				canvas.tempEndPoint.y += 5;
+			}
 			canvas.tempEndPort = lineEndBlock.portArray[lineEndBlock.endPortNumber];
 			canvas.setPosition();
 			addLine();
@@ -162,13 +166,15 @@ public class basicObj extends JPanel implements MouseListener, MouseMotionListen
 			canvas.tempStartPort = null;
 			canvas.tempEndPort = null;
 
+			canvas.lineEndBlock = null;
 		}
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		if (canvas.frame.currentBtn == canvas.frame.assButton || canvas.frame.currentBtn == canvas.frame.genButton
-				|| canvas.frame.currentBtn == canvas.frame.comButton) {
+		if ((canvas.frame.currentBtn == canvas.frame.assButton || canvas.frame.currentBtn == canvas.frame.genButton
+				|| canvas.frame.currentBtn == canvas.frame.comButton) && canvas.tempStartPoint != null) {
 
 			canvas.lineEndBlock = this;
 		}
@@ -186,13 +192,28 @@ public class basicObj extends JPanel implements MouseListener, MouseMotionListen
 
 		if (canvas.frame.currentBtn == canvas.frame.sltButton) {
 			objStart = new Point(e.getPoint().x + this.getLocation().x, e.getPoint().y + this.getLocation().y);
-			// this.setLocation(movePoint);
 		}
 		if (canvas.frame.currentBtn == canvas.frame.assButton || canvas.frame.currentBtn == canvas.frame.genButton
 				|| canvas.frame.currentBtn == canvas.frame.comButton) {
 			chooseStartPort(e);
-
+			objStart = new Point(e.getPoint().x + this.getLocation().x, e.getPoint().y + this.getLocation().y);
 			canvas.tempStartPoint = this.portArray[this.startPortNumber].getLocation();
+			if (this.startPortNumber == 0) {
+				canvas.tempStartPoint.x += 5;
+				canvas.tempStartPoint.y += 10;
+			}
+			if (this.startPortNumber == 1) {
+
+				canvas.tempStartPoint.y += 5;
+			}
+			if (this.startPortNumber == 2) {
+
+				canvas.tempStartPoint.x += 5;
+			}
+			if (this.startPortNumber == 3) {
+				canvas.tempStartPoint.x += 10;
+				canvas.tempStartPoint.y += 5;
+			}
 			canvas.tempStartPort = this.portArray[this.startPortNumber];
 
 		}
@@ -209,18 +230,15 @@ public class basicObj extends JPanel implements MouseListener, MouseMotionListen
 			canvas.selectedObj.add(this);
 		}
 		if (canvas.frame.currentBtn == canvas.frame.classes) {
-			System.out.println(e.getX() + "," + e.getY());
 			Point drawPoint = new Point(e.getPoint());
 			drawPoint = SwingUtilities.convertPoint(this, drawPoint.x, drawPoint.y, canvas);
 			basicObj basic = new classObj(canvas);
 			canvas.add(basic, 0);
-			// basic.setLocation(drawPoint.x, drawPoint.y);
 			basic.setLocation(drawPoint);
 			canvas.basicArray.add(basic);
 
 		}
 		if (canvas.frame.currentBtn == canvas.frame.useCase) {
-			System.out.println(e.getX() + "," + e.getY());
 			Point drawPoint = new Point(e.getPoint());
 			drawPoint = SwingUtilities.convertPoint(this, drawPoint.x, drawPoint.y, canvas);
 			basicObj basic = new caseObj(canvas);
@@ -244,7 +262,8 @@ public class basicObj extends JPanel implements MouseListener, MouseMotionListen
 	public void mouseDragged(MouseEvent e) {
 		if (canvas.frame.currentBtn == canvas.frame.sltButton && parentComp == null) {
 			canvas.moveToFront(this);
-			objDrag = new Point(e.getPoint().x + this.getLocation().x - moveStartPoint.x, e.getPoint().y + this.getLocation().y - moveStartPoint.y);// fix location by minus moveStarPoint
+			objDrag = new Point(e.getPoint().x + this.getLocation().x - moveStartPoint.x,
+					e.getPoint().y + this.getLocation().y - moveStartPoint.y);// fix location by minus moveStarPoint
 			this.setLocation(objDrag);
 
 			canvas.setChangedPosition();
@@ -253,6 +272,10 @@ public class basicObj extends JPanel implements MouseListener, MouseMotionListen
 		}
 		if (canvas.frame.currentBtn == canvas.frame.sltButton && parentComp != null) {
 			findParent().moveOutside();
+		}
+
+		if (canvas.frame.currentBtn == canvas.frame.assButton || canvas.frame.currentBtn == canvas.frame.genButton
+				|| canvas.frame.currentBtn == canvas.frame.comButton) {
 
 		}
 

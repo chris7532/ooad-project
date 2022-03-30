@@ -13,6 +13,8 @@ public class compositionLine extends basicLine {
 		this.lineEndPoint = end;
 		this.lineStartPort = startp;
 		this.lineEndPort = endp;
+		this.startPortNumber = startp.block.startPortNumber;
+		this.endPortNumber = endp.block.endPortNumber;
 	}
 	
 	

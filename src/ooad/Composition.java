@@ -122,7 +122,6 @@ public class Composition extends JPanel implements MouseListener, MouseMotionLis
 		findParent().dragPoint.x -= moveStartPoint.x;
 		findParent().dragPoint.y -= moveStartPoint.y;
 		this.setLocation(dragPoint);
-		// findParent().travesalTag = false;
 		this.moveInside();
 		canvas.repaint();
 	}
@@ -181,9 +180,12 @@ public class Composition extends JPanel implements MouseListener, MouseMotionLis
 	public void mouseDragged(MouseEvent e) {
 		if (canvas.frame.currentBtn == canvas.frame.sltButton && this.parent == null) {
 			moveOutside();
-		} else {
+		} 
+		if (canvas.frame.currentBtn == canvas.frame.sltButton && this.parent != null) {
 			findParent().moveOutside();
-		}
+		} 
+		
+		
 
 	}
 

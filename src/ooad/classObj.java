@@ -17,8 +17,6 @@ public class classObj extends basicObj {
 		portArray[3].setBounds(0, 65, 10, 10);
 
 		this.setSize(120, 140);
-		// this.setLocation(x1, y1);
-		// this.setBackground(Color.white);
 
 	}
 
@@ -36,11 +34,6 @@ public class classObj extends basicObj {
 		g.setFont(font);
 		g.drawString(objectName, 30 + (int) empty, 10 + 25);
 
-		/*
-		 * int portion = 40; g.setColor(Color.black); g.drawRect(x1, y1, 100, 120);
-		 * g.drawLine(x1, y1 + portion, x2, y1 + portion); g.drawLine(x1, y1 + portion *
-		 * 2, x2, y1 + portion * 2);
-		 */
 
 	}
 
